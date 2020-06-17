@@ -21,9 +21,10 @@ class PaintingActivity : AppCompatActivity() {
         private const val RESOURCE_EXTRA = "resource_extra"
         private const val URI_EXTRA = "uri_extra"
         fun newIntent(context: Context, @DrawableRes resource: Int? = null, selectedFile: Uri? = null): Intent =
-            Intent(context, PaintingActivity::class.java)
-                .putExtra(RESOURCE_EXTRA, resource)
-                .putExtra(URI_EXTRA, selectedFile)
+            Intent(context, PaintingActivity::class.java).apply {
+                resource?.let { putExtra(RESOURCE_EXTRA, it) }
+                selectedFile?.let { putExtra(URI_EXTRA, it) }
+            }
     }
 
     private val disposable = SerialDisposable()
@@ -33,18 +34,14 @@ class PaintingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         disposable.setFrom(
-            gpu_image_view.dispose(),
-            gpu_image_view.setImage(intent.getIntExtra(RESOURCE_EXTRA, -1))
-                .subscribe(),
+            painting_image_view.dispose(),
             change_color_button.clicks()
-                .subscribe { gpu_image_view.changeColor() }
+                .subscribe { painting_image_view.changeColor() }
         )
-<<<<<<< Updated upstream
-=======
 
         painting_image_view.setPaintingImage(
             if (intent.hasExtra(URI_EXTRA)) {
-                getBitmap(intent?.extras?.get(URI_EXTRA) as? Uri)
+                getBitmap(intent?.extras?.get(URI_EXTRA) as Uri)
             } else {
                 BitmapFactory.decodeResource(
                     resources,
@@ -53,10 +50,9 @@ class PaintingActivity : AppCompatActivity() {
                 )
             }
         )
->>>>>>> Stashed changes
     }
 
-    private fun getBitmap(uri: Uri?) = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+    private fun getBitmap(uri: Uri) = MediaStore.Images.Media.getBitmap(contentResolver, uri)
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,49 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context=".activitiy.PaintingActivity">
 
-    <!--<ImageView-->
-    <!--android:id="@+id/room_image_normal"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:background="@android:color/holo_green_dark"-->
-    <!--android:layout_height="300dp"-->
-    <!--android:minHeight="100dp" />-->
-
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="20dp"-->
-    <!--android:background="@android:color/black" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/room_image"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:background="@android:color/holo_blue_light" />-->
-
     <com.example.filip.cunnyedgetest.view.PaintingImageView
-        android:id="@+id/gpu_image_view"
+        android:id="@+id/painting_image_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_gravity="center" />
-
 
     <TextView
         android:id="@+id/change_color_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/holo_green_dark"
+        android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:padding="16dp"
+        android:text="Change Color"
         android:textColor="@android:color/white"
-        android:background="@android:color/holo_green_dark"
-        android:layout_gravity="bottom"
-        android:foreground="?attr/selectableItemBackground"
-        android:text="Change Color"/>
+        android:textSize="16sp" />
 
 </FrameLayout>
