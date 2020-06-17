@@ -2,10 +2,8 @@ package com.example.filip.cunnyedgetest.view
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PointF
-import androidx.annotation.DrawableRes
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.example.filip.cunnyedgetest.floodfill.FloodFill
@@ -46,13 +44,7 @@ class PaintingImageView @JvmOverloads constructor(
         )
     }
 
-    fun setImage(@DrawableRes sourceRes: Int) {
-        val source = BitmapFactory.decodeResource(
-            resources,
-            sourceRes,
-            BitmapFactory.Options().apply { inScaled = false }
-        )
-
+    fun setPaintingImage(source: Bitmap) {
         val scaledBitmap = Bitmap.createScaledBitmap(
             source,
             screenWidth,

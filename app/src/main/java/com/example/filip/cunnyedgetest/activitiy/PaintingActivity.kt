@@ -2,7 +2,10 @@ package com.example.filip.cunnyedgetest.activitiy
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import com.example.filip.cunnyedgetest.R
@@ -16,8 +19,12 @@ class PaintingActivity : AppCompatActivity() {
 
     companion object {
         private const val RESOURCE_EXTRA = "resource_extra"
-        fun newIntent(context: Context, @DrawableRes resource: Int): Intent = Intent(context, PaintingActivity::class.java)
-            .putExtra(RESOURCE_EXTRA, resource)
+        private const val URI_EXTRA = "uri_extra"
+        fun newIntent(context: Context, @DrawableRes resource: Int? = null, selectedFile: Uri? = null): Intent =
+            Intent(context, PaintingActivity::class.java).apply {
+                resource?.let { putExtra(RESOURCE_EXTRA, it) }
+                selectedFile?.let { putExtra(URI_EXTRA, it) }
+            }
     }
 
     private val disposable = SerialDisposable()
@@ -32,8 +39,20 @@ class PaintingActivity : AppCompatActivity() {
                 .subscribe { painting_image_view.changeColor() }
         )
 
-        painting_image_view.setImage(intent.getIntExtra(RESOURCE_EXTRA, -1))
+        painting_image_view.setPaintingImage(
+            if (intent.hasExtra(URI_EXTRA)) {
+                getBitmap(intent?.extras?.get(URI_EXTRA) as Uri)
+            } else {
+                BitmapFactory.decodeResource(
+                    resources,
+                    intent.getIntExtra(RESOURCE_EXTRA, -1),
+                    BitmapFactory.Options().apply { inScaled = false }
+                )
+            }
+        )
     }
+
+    private fun getBitmap(uri: Uri) = MediaStore.Images.Media.getBitmap(contentResolver, uri)
 
     override fun onDestroy() {
         super.onDestroy()
