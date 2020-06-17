@@ -35,6 +35,7 @@ class PaintingImageView @JvmOverloads constructor(
         )
     }
 
+<<<<<<< Updated upstream
     fun setImage(@DrawableRes sourceRes: Int): Observable<Unit> {
         val source = BitmapFactory.decodeResource(
             resources,
@@ -42,6 +43,9 @@ class PaintingImageView @JvmOverloads constructor(
             BitmapFactory.Options().apply { inScaled = false }
         )
 
+=======
+    fun setPaintingImage(source: Bitmap) {
+>>>>>>> Stashed changes
         val scaledBitmap = Bitmap.createScaledBitmap(
             source,
             screenWidth,
