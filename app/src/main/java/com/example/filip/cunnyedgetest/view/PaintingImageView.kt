@@ -15,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import jp.co.cyberagent.android.gpuimage.GPUImageColorBlendFilter
 import jp.co.cyberagent.android.gpuimage.GPUImageThresholdEdgeDetection
 import jp.co.cyberagent.android.gpuimage.GPUImageView
@@ -24,18 +25,28 @@ class PaintingImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : GPUImageView(context, attrs) {
 
+    private val imageSetSubject = PublishSubject.create<Unit>()
     private val screenWidth: Int by lazy { resources.displayMetrics.widthPixels }
     private lateinit var edgeBitmap: Bitmap
     private val floodFill = FloodFill("FloodFill", null)
 
-    val dispose = {
+    val dispose: () -> CompositeDisposable = {
         CompositeDisposable(
+            imageSetSubject
+                .switchMap { edgeObservable }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    edgeBitmap = it
+                    filter = GPUImageColorBlendFilter().apply {
+                        bitmap = edgeBitmap
+                    }
+                },
             touches(Predicate { it.action == MotionEvent.ACTION_DOWN })
                 .subscribe { imageTouched(it) }
         )
     }
 
-    fun setImage(@DrawableRes sourceRes: Int): Observable<Unit> {
+    fun setImage(@DrawableRes sourceRes: Int) {
         val source = BitmapFactory.decodeResource(
             resources,
             sourceRes,
@@ -56,11 +67,9 @@ class PaintingImageView @JvmOverloads constructor(
         }
 
         layoutParams.height = scaledBitmap.height
+        setImage(scaledBitmap)
 
-        return Observable
-            .fromCallable { setImage(scaledBitmap) }
-            .switchMap { edgeObservable }
-            .observeOn(AndroidSchedulers.mainThread())
+        imageSetSubject.onNext(Unit)
     }
 
     /**
@@ -68,15 +77,12 @@ class PaintingImageView @JvmOverloads constructor(
      * so white needs to be turned into transparent to show the normal image below.
      * Changing color of every pixel is resourceful, so it needs to be done on a separate thread.
      */
-    private val edgeObservable = Observable.fromCallable {
-        edgeBitmap = gpuImage.bitmapWithFilterApplied
-            .replaceColor(Color.WHITE, Color.TRANSPARENT)
-
-        filter = GPUImageColorBlendFilter().apply {
-            bitmap = edgeBitmap
+    private val edgeObservable = Observable
+        .fromCallable {
+            gpuImage.bitmapWithFilterApplied
+                .replaceColor(Color.WHITE, Color.TRANSPARENT)
         }
-        requestRender()
-    }.subscribeOn(Schedulers.computation())
+        .subscribeOn(Schedulers.computation())
 
     private fun imageTouched(event: MotionEvent) {
         val displayTouch = PointF().apply { set(event.x, event.y) }
