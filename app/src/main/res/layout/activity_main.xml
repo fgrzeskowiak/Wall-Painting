@@ -5,7 +5,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activitiy.PaintingActivity">
 
     <!--<ImageView-->
     <!--android:id="@+id/room_image_normal"-->
@@ -26,7 +26,7 @@
         <!--android:layout_gravity="center"-->
         <!--android:background="@android:color/holo_blue_light" />-->
 
-    <jp.co.cyberagent.android.gpuimage.GPUImageView
+    <com.example.filip.cunnyedgetest.view.PaintingImageView
         android:id="@+id/gpu_image_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"

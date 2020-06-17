@@ -1,4 +1,4 @@
-package com.example.filip.cunnyedgetest
+package com.example.filip.cunnyedgetest.helpers
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

@@ -1,9 +1,13 @@
-package com.example.filip.cunnyedgetest;
+package com.example.filip.cunnyedgetest.floodfill;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+
+import com.example.filip.cunnyedgetest.floodfill.Command;
+import com.example.filip.cunnyedgetest.floodfill.ToolAttributes;
+import com.example.filip.cunnyedgetest.floodfill.ToolReport;
 
 /**
  * To make a Tool:
