@@ -1,4 +1,4 @@
-package com.example.filip.cunnyedgetest;
+package com.example.filip.cunnyedgetest.floodfill;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
