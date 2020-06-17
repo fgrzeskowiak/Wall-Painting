@@ -27,12 +27,12 @@ class PaintingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         disposable.setFrom(
-            gpu_image_view.dispose(),
-            gpu_image_view.setImage(intent.getIntExtra(RESOURCE_EXTRA, -1))
-                .subscribe(),
+            painting_image_view.dispose(),
             change_color_button.clicks()
-                .subscribe { gpu_image_view.changeColor() }
+                .subscribe { painting_image_view.changeColor() }
         )
+
+        painting_image_view.setImage(intent.getIntExtra(RESOURCE_EXTRA, -1))
     }
 
     override fun onDestroy() {
